@@ -1,7 +1,13 @@
 var http = require('http');
 var express = require('express');
+var bodyParser = require('body-parser');
 
 var app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 
 //There is no static file hosting required, as this is API server only
 app.use(express.static('public'));
@@ -17,6 +23,12 @@ app.get("/proxyresources", function(req, res) {
         name: 'proxy-r002',
         value: "proxy-Resources 002"
     }]);
+});
+
+app.post("/proxyresources", function(req, res) {
+    var newResources = req.body;
+    newResources["_id"] = 'This is new ID';
+    return res.json(newResources);
 });
 
 app.get("/proxyresources/1", function(req, res) {
